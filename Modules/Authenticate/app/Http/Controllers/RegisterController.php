@@ -27,7 +27,7 @@ class RegisterController extends Controller
         // Optionally, log the user in after registration
         auth()->login($user);
 
-        return redirect()->route('home');
+        return redirect('/dashboard');
     }
 
     protected function validator(array $data)
