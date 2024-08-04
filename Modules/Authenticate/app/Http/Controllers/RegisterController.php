@@ -3,65 +3,49 @@
 namespace Modules\Authenticate\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function showRegistrationForm()
     {
-        return view('authenticate::index');
+        dd('sdfsdf');
+        return view('auth::register');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function register(Request $request)
     {
-        return view('authenticate::create');
+        $this->validator($request->all())->validate();
+
+        $user = $this->create($request->all());
+
+        // Optionally, log the user in after registration
+        auth()->login($user);
+
+        return redirect()->route('home');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
+    protected function validator(array $data)
     {
-        //
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
     }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    protected function create(array $data)
     {
-        return view('authenticate::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('authenticate::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
     }
 }

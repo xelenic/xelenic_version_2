@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Authenticate\Http\Controllers\AuthenticateController;
 use Modules\Authenticate\Http\Controllers\RegisterController;
 use Modules\Authenticate\Http\Controllers\LoginController;
 /*
@@ -15,8 +14,7 @@ use Modules\Authenticate\Http\Controllers\LoginController;
 |
 */
 
-
-Route::prefix('auth')->group(function () {
+Route::group([], function () {
     Route::get('register', [RegisterController::class,'showRegistrationForm'])->name('register');
     Route::post('register',[RegisterController::class,'register']);
 
@@ -24,4 +22,10 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class,'login']);
     Route::post('logout', [LoginController::class,'logout'])->name('logout');
 });
+
+
+
+//Route::prefix('auth')->group(function () {
+//
+//});
 
