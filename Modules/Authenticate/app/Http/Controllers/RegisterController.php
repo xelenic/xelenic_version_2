@@ -15,8 +15,7 @@ class RegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        dd('sdfsdf');
-        return view('auth::register');
+        return view('authenticate::register');
     }
 
     public function register(Request $request)
